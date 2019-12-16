@@ -1,0 +1,19 @@
+<h1>Lista de posts</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Conteudo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each posts}}
+            <tr>
+                <tr>{{titulo}}</tr>
+                <tr>{{conteudo}}</tr>
+                <tr><a href="/deletar/{{id}}"><button>Deletar</button></a></tr>
+            </tr>
+        {{/each}}   
+    </tbody>
+</table>
