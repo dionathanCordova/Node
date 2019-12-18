@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 
 // Configuração de conexão
@@ -11,41 +12,30 @@ mongoose.connect('mongodb://localhost/cursoNode', {
 })
 
 // Definindo o Model - Usuários
-const UsuarioSchema = mongoose.Schema({
+const PostagensSchema = mongoose.Schema({
     nome: {
         type: String,
         require: true
     },
 
-    sobrenome : {
+    slug : {
         type: String,
         require: true
     },
-
-    email: {
-        type: String,
-        require: true
-    },
-
-    idade: {
-        type: Number,
-        require: true
-    }
-
 })
 
 // Definindo a collection
-mongoose.model('usuarios', UsuarioSchema);
+mongoose.model('categorias', PostagensSchema);
 
 // Criando usuarios
-const CreateUser = mongoose.model('usuarios');
-new CreateUser({
-    nome : 'Dionathan',
-    sobrenome: 'Cordova',
-    email: 'dntcordova@hotmail.com',
-    idade: 32
-}).save().then(() => {
-    console.log('Usuario cadastrado')
-}).catch((err) => {
-    console.log('Erro na criação do usuário: ' + err)
-})
+// const CreateUser = mongoose.model('usuarios');
+// new CreateUser({
+//     nome : 'Dionathan',
+//     sobrenome: 'Cordova',
+//     email: 'dntcordova@hotmail.com',
+//     idade: 32
+// }).save().then(() => {
+//     console.log('Usuario cadastrado')
+// }).catch((err) => {
+//     console.log('Erro na criação do usuário: ' + err)
+// })
