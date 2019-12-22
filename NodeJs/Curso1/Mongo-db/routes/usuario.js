@@ -5,6 +5,9 @@ require("../models/usuario")
 const Usuario = mongoose.model('usuarios')
 const bcrypt = require('bcryptjs')
 
+const passport = require('passport')
+require('../config/auth')(passport, Usuario)
+
 router.get("/registro", (req, res) => {
     res.render("usuarios/registro")
 })
@@ -71,17 +74,21 @@ router.get("/login", (req, res) => {
     res.render("usuarios/login")
 })
 
-router.post("/login", (req, res) => {
-
-    Usuario.findOne({email: req.body.email}).then((usuario) => {
-        if(usuario) {
-            res.redirect('/admin/postagens')
-        }else{
-            req.flash('error_msg', 'Não foi possivel localizar os dado de acessp.')
-        }
-    }).catch((error) => {
-        req.flash("error_msg", 'Falha ao efetuar login')
-    })
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", {
+        successRedirect: "/",
+        failureRedirect: "/usuarios/login",
+        failureFlash: true
+    })(req, res, next)
+    // Usuario.findOne({email: req.body.email}).then((usuario) => {
+    //     if(usuario) {
+    //         res.redirect('/admin/postagens')
+    //     }else{
+    //         req.flash('error_msg', 'Não foi possivel localizar os dado de acessp.')
+    //     }
+    // }).catch((error) => {
+    //     req.flash("error_msg", 'Falha ao efetuar login')
+    // })
 })
 
 module.exports = router

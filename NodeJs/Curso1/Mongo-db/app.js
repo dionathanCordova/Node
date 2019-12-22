@@ -11,6 +11,8 @@ const session = require('express-session')
 const flash = require('connect-flash')
 require('./models/Postagens')
 const Postagens = mongoose.model('postagens')
+const passport = require('passport')
+const db = require("./config/db")
 
 // Configurações
     // Body Parser
@@ -24,7 +26,7 @@ const Postagens = mongoose.model('postagens')
     // Mongoose
     // Configuração de conexão
     mongoose.Promise = global.Promise;
-    mongoose.connect('mongodb://localhost/cursoNode', {
+    mongoose.connect(db.mongoURI, {
         useUnifiedTopology: true,
         useNewUrlParser: true
     }).then(() => {
@@ -43,6 +45,9 @@ const Postagens = mongoose.model('postagens')
         saveUninitialize: true,
     }))
 
+    app.use(passport.initialize())
+    app.use(passport.session())
+
     // usando o flash
     app.use(flash())
 
@@ -52,6 +57,10 @@ const Postagens = mongoose.model('postagens')
         res.locals.success_msg = req.flash('success_msg')
         // criando uma variavel global chamada error_msg
         res.locals.error_msg = req.flash('error_msg')
+        // criando variavel gloval de autenticacao do passport
+        res.locals.error = req.flash('error')
+        // criando a variavel global contendo os dados de usuario logado
+        res.locals.user = req.user || null
         next()
     })
 
@@ -87,7 +96,7 @@ const Postagens = mongoose.model('postagens')
     })
 
 // Outros
-const PORT = 8080;
+const PORT = db.PORT;
 app.listen(PORT, () => {
     console.log('Servidor rodando')
 })

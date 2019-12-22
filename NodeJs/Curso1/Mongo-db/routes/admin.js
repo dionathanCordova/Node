@@ -6,11 +6,13 @@ const Categoria = mongoose.model('categorias')
 require('../models/Postagens')
 const Postagem = mongoose.model('postagens')
 
+const isAdmin = require('../helpers/isAdmin')
+
 router.get('/', (req, res) => {
     res.render('admin/index')
 })
 
-router.get('/categorias', (req, res) => {
+router.get('/categorias', isAdmin, (req, res) => {
     Categoria.find().sort({date: 'desc'}).then((categorias) => {
         res.render('admin/categorias', {categorias : categorias});
     }).catch((err) => {
@@ -19,11 +21,11 @@ router.get('/categorias', (req, res) => {
     })
 })
 
-router.get('/categoria/add', (req, res) => {
+router.get('/categoria/add', isAdmin, (req, res) => {
     res.render('admin/addcategoria');
 })
 
-router.post('/categorias/nova', (req, res) => {
+router.post('/categorias/nova', isAdmin,  (req, res) => {
     var erros = [];
     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         erros.push({texto: 'Nome invalido'});
@@ -57,7 +59,7 @@ router.post('/categorias/nova', (req, res) => {
     }
 })
 
-router.post('/postagens/nova', (req, res) => {
+router.post('/postagens/nova', isAdmin,  (req, res) => {
     var erros = [];
 
     if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
@@ -101,7 +103,7 @@ router.post('/postagens/nova', (req, res) => {
     } 
 }) 
 
-router.get('/categoria/edit/:id', (req, res) => {
+router.get('/categoria/edit/:id', isAdmin,  (req, res) => {
     Categoria.findOne({_id:req.params.id}).then((categoria) => {
         res.render('admin/editarcategoria', {categoria: categoria})
     }).catch((err) =>{
@@ -110,7 +112,7 @@ router.get('/categoria/edit/:id', (req, res) => {
     })
 })
 
-router.post('/categorias/edit', (req, res) => {
+router.post('/categorias/edit', isAdmin,  (req, res) => {
     var erros = []
     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         erros.push({texto: 'Nome incorreto'})
@@ -146,7 +148,7 @@ router.post('/categorias/edit', (req, res) => {
     }
 })
 
-router.post('/categorias/delete', (req, res) => {
+router.post('/categorias/delete', isAdmin,  (req, res) => {
     Categoria.remove({_id: req.body.id}).then(() => {
         req.flash('success_msg', 'Categoria deletada');
         res.redirect('/admin/categorias');
@@ -156,7 +158,7 @@ router.post('/categorias/delete', (req, res) => {
     })
 })
 
-router.get('/postagens', (req, res) => {
+router.get('/postagens', isAdmin,  (req, res) => {
     Postagem.find().populate("categoria").sort({data: 'desc'}).then((postagens) => {
         res.render("admin/postagens", {postagens: postagens})
     }).catch((err) => {
@@ -165,7 +167,7 @@ router.get('/postagens', (req, res) => {
     })
 })
 
-router.get('/postagens/add', (req, res) => {
+router.get('/postagens/add', isAdmin,  (req, res) => {
     Categoria.find().then((categorias) => {
         res.render('admin/addpostagem', {categorias: categorias})
     }).catch((err) => {
@@ -174,7 +176,7 @@ router.get('/postagens/add', (req, res) => {
     })
 })
 
-router.get("/postagens/edit/:id" , (req, res) => {
+router.get("/postagens/edit/:id" , isAdmin,  (req, res) => {
     Postagem.findOne({_id: req.params.id}).then((postagem) => {
         Categoria.find().then((categorias) => {
             res.render('admin/editarpostagem', {postagem: postagem, categorias: categorias})
@@ -188,7 +190,7 @@ router.get("/postagens/edit/:id" , (req, res) => {
     })
 })
 
-router.post('/postagem/edit', (req, res) => {
+router.post('/postagem/edit', isAdmin,  (req, res) => {
     Postagem.findOne({_id: req.body.id}).then((postagem) => {
         postagem.titulo = req.body.titulo
         postagem.slug = req.body.slug
@@ -211,7 +213,7 @@ router.post('/postagem/edit', (req, res) => {
 })
 
 
-router.get('/postagens/deletar/:id', (req, res) => {
+router.get('/postagens/deletar/:id', isAdmin,  (req, res) => {
     Postagem.remove({_id: req.params.id}).then(() => {
         req.flash('success_msg', 'Postagem removida')
         res.redirect('/admin/postagens')
@@ -221,4 +223,8 @@ router.get('/postagens/deletar/:id', (req, res) => {
     })
 })
 
+router.get("/logout", (req, res) => {
+    req.logout()
+    res.redirect("/")
+})
 module.exports = router;
