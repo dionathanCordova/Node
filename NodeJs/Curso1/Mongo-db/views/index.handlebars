@@ -1,0 +1,26 @@
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1>NodeJs Tutorial</h1>
+        <p>Bootstrap is the most popular HTML, CSS...</p>
+        <p class="lead">
+            <a href="" class="btn btn-primary btn-ls">Crie uma conta</a>
+        </p>
+    </div>
+</div>
+<h2>Pagina de posts</h2>
+
+{{#each postagens}}
+<div class="card">
+    <div class="card-body">
+        <h2>{{titulo}}</h2><br>
+        <p>{{descricao}}</p>
+        <a href="/postagem/{{slug}}"><button class='btn btn-success'>Leia mais</button></a> 
+        <hr>
+        <small>Categoria: {{categoria.nome}}</small><br>
+        <small>{{data}}</small>
+    </div>
+</div>
+{{else}}
+    <p>Nenhuma postagem registrada</p>
+{{/each}}
