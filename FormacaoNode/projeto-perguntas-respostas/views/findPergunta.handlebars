@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="card" id='card-perguntas'>
+        <div class="card-header">
+            <h3>{{pergunta.titulo}} </h3>
+            <p>{{pergunta.descricao}}</p>  
+        </div>
+
+        {{#each respostas}}
+           <div class="card-body">
+                <p>{{corpo}}</p>
+                <hr>
+            </div>
+        {{/each}}
+        <div class="card-footer">
+            <form action="/respostaAction" method="POST" >
+                <input type="hidden" name="pergunta"value="{{pergunta.id}}">
+                <label for="resposta">Resposta</label>
+                <textarea id="resposta" cols="30" rows="4" name='corpo' class="form-control" placeholder="Digite sua resposta"></textarea><br>
+                <button type="submit" class="btn btn-primary">Responder</button>
+            </form>
+        </div>
+    </div>
+</div>

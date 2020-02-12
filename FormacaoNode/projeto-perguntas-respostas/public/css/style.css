@@ -1,0 +1,21 @@
+body{
+    background-color: #eceff1;
+}
+
+.navMain a{
+    text-decoration: none;
+    color: #FFF;
+    font-weight: 700;
+}
+
+.navMain  .navbar-brand{
+    color: #FFF;
+}
+
+.navMain  .navbar-brand:hover{
+    color: rgb(255, 231, 231);
+}
+
+#card-perguntas{
+    margin-top: 4vmin;
+}
